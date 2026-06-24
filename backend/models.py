@@ -19,9 +19,20 @@ class User(AbstractUser):
                             default='customer'
     )
 
-    # 3. Переключаем авторизацию на email вместо логина
+    # Переключаем авторизацию на email вместо логина
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-
     def __str__(self):
         return f"{self.email} ({self.get_type_display()})"
+ # Класс для магазина
+class Shop(models.Model):
+    name = models.CharField(max_length=50, verbose_name='Название')
+    url = models.URLField(verbose_name='Ссылка', null=True, blank=True)
+    user = models.OneToOneField (
+        User,
+        verbose_name='Пользователь',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    state = models.BooleanField(default=True, verbose_name='Статус работы')
