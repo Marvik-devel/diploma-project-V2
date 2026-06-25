@@ -1,3 +1,5 @@
+from itertools import product
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -36,3 +38,29 @@ class Shop(models.Model):
         blank=True
     )
     state = models.BooleanField(default=True, verbose_name='Статус работы')
+
+class Category(models.Model):
+    shops = models.ManyToManyField (max_length=50, verbose_name='Название', blank=True)
+    name = models.CharField (max_length=40, verbose_name='Магазины')
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Список категорий'
+
+    def __str__(self):
+        return self.name
+
+class Product (models.Model):
+    name = models.CharField(max_length=80, verbose_name='Название')
+    category = models.ForeignKey(
+        Category,
+        verbose_name='Категория',
+        on_delete=models.CASCADE,
+        related_name='product'
+    )
+    class Meta:
+        verbose_name = 'Продукт'
+        verbose_name_plural = 'Списко продуктов'
+
+    def __str__(self):
+        return self.name
