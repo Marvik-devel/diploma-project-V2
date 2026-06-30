@@ -3,7 +3,7 @@ from tkinter.constants import CASCADE
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import ForeignKey, CharField
+from django.db.models import ForeignKey, CharField, PositiveIntegerField
 from django.utils.translation import gettext_lazy as _
 
 STATE_CHOICES = (
@@ -176,3 +176,16 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Список заказов'
+
+class OrderItem (models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name='order_items',
+    )
+    product_info = models.ForeignKey(
+        ProductInfo,
+        on_delete=models.CASCADE,
+        related_name='order_item_info'
+    )
+    quantity = models.PositiveIntegerField()
