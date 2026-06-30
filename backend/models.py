@@ -64,3 +64,33 @@ class Product (models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProductInfo(models.Model):
+    product = models.ForeignKey(
+        Product,
+        verbose_name='Продукт',
+        on_delete=models.CASCADE,
+        related_name='product_infos'
+    )
+    shop = models.ForeignKey(
+        Shop,
+        verbose_name='Магазин',
+        on_delete=models.CASCADE,
+        related_name='product_infos'
+    )
+
+    name = models.CharField(max_length=80, verbose_name='Характеристика/Модель', blank=True)
+
+    external_id = models.PositiveIntegerField(verbose_name='Внешний ID')
+
+    quantity = models.PositiveIntegerField(verbose_name='Количество')
+    price = models.PositiveIntegerField(verbose_name='Цена')
+    price_rrc = models.PositiveIntegerField(verbose_name='Рекомендуемая розничная цена')
+
+    class Meta:
+        verbose_name = 'Информация о продукте'
+        verbose_name_plural = 'Информационные блоки о продуктах'
+
+    def __str__(self):
+        return f"{self.product.name} - {self.shop.name}"
