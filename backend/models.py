@@ -2,6 +2,7 @@ from itertools import product
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import ForeignKey, CharField
 from django.utils.translation import gettext_lazy as _
 
 class User(AbstractUser):
@@ -94,3 +95,36 @@ class ProductInfo(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.shop.name}"
+
+class Parameter(models.Model):
+    name = models.CharField(max_length=80, verbose_name='Название параметра')
+
+    class Meta:
+        verbose_name = 'Параметр'
+        verbose_name_plural = 'Список параметров'
+
+    def __str__(self):
+        return self.name
+
+class ProductParameter(models.Model):
+    product_info = models.ForeignKey(
+        ProductInfo,
+        verbose_name='Информация о продукте',
+        on_delete=models.CASCADE,
+        related_name='product_parameters'
+    )
+    parameter = models.ForeignKey(
+        Parameter,
+        verbose_name='Параметр',
+        on_delete=models.CASCADE,
+        related_name = 'product_parameters'
+    )
+    value = models.CharField(max_length=80, verbose_name='Значение')
+
+    class Meta:
+        verbose_name = 'Параметр продукта'
+        verbose_name_plural = 'Параметры продуктов'
+
+    def __str__(self):
+        return f"{self.parameter.name} - {self.value}"
+
