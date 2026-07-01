@@ -52,7 +52,7 @@ class Shop(models.Model):
     state = models.BooleanField(default=True, verbose_name='Статус работы')
 
 class Category(models.Model):
-    shops = models.ManyToManyField (max_length=50, verbose_name='Название', blank=True)
+    shops = models.ManyToManyField (Shop, verbose_name='Название', blank=True)
     name = models.CharField (max_length=40, verbose_name='Магазины')
 
     class Meta:
