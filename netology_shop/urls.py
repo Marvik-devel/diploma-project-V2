@@ -20,8 +20,5 @@ from backend.views import RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.core_admin_site if hasattr(admin.site, 'core_admin_site') else admin.site.urls),
-
-    # Добавляем маршрут для регистрации
-    # .as_view() нужен обязательно, так как RegisterView — это класс, а не функция
     path('api/v1/user/register/', RegisterView.as_view(), name='user-register'),
 ]
