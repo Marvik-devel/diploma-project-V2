@@ -15,15 +15,3 @@ class RegisterView(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            # 2. Проверь данные на валидность. У сериализатора есть метод is_valid().
-            # Если данные валидны:
-            #    а) вызови метод serializer.save() (он создаст пользователя)
-            #    б) верни Response с данными пользователя (serializer.data) и статусом status.HTTP_201_CREATED
-
-            # 3. Если данные НЕ валидны:
-            #    а) верни Response с ошибками (serializer.errors) и статусом status.HTTP_400_BAD_REQUEST
-
-            # Твой код ниже:
-
-
-# Create your views here.
