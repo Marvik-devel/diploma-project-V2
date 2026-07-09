@@ -2,7 +2,7 @@ from itertools import product
 
 from backend.models import Product
 from django.shortcuts import render
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -45,3 +45,6 @@ class ProductInfoView(APIView):
         products = ProductInfo.objects.all()
         serializer = ProductInfoSerializer (products, many=True)
         return Response(serializer.data)
+
+class BaseView(APIView):
+    permission_classes = [IsAuthenticated]

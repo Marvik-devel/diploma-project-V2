@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from backend.models import User, ProductInfo
+from backend.models import OrderItem
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -22,3 +23,19 @@ class ProductInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductInfo
         fields = ('id', 'model', 'external_id', 'shop', 'product', 'price', 'price_rrt', 'quantity')
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    product_info = ProductInfoSerializer(read_only=True)
+    product_info_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'product_info', 'product_info_id', 'quantity', 'order')
+        extra_kwargs = {
+            'order': {'write_only': True}
+        }
+
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Количество товара должно быть больше 0.")
+        return value
