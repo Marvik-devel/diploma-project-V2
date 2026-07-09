@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from backend.models import User
+from backend.models import User, ProductInfo
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -15,4 +16,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'password', 'company', 'position', 'type')
         extra_kwargs = {'password': {'write_only': True}}
 
-class
+class ProductInfoSerializer(serializers.ModelSerializer):
+    shop = serializers.StringRelatedField()
+    product = serializers.StringRelatedField()
+    class Meta:
+        model = ProductInfo
+        fields = ('id', 'model', 'external_id', 'shop', 'product', 'price', 'price_rrt', 'quantity')

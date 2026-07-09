@@ -1,11 +1,17 @@
+from itertools import product
+
+from backend.models import Product
 from django.shortcuts import render
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from backend.serializers import UserRegisterSerializer
+from backend.serializers import UserRegisterSerializer, ProductInfoSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from backend.models import ProductInfo
+
 
 
 class RegisterView(APIView):
@@ -32,3 +38,10 @@ class LoginView(ObtainAuthToken):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProductInfoView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        products = ProductInfo.objects.all()
+        serializer = ProductInfoSerializer (products, many=True)
+        return Response(serializer.data)
