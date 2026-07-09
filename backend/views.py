@@ -5,6 +5,7 @@ from rest_framework import status
 from backend.serializers import UserRegisterSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 
 
 class RegisterView(APIView):
@@ -19,8 +20,10 @@ class RegisterView(APIView):
 
 
 class LoginView(ObtainAuthToken):
+    renderer_classes = [BrowsableAPIRenderer, JSONRenderer]
+
     def get(self, request, *args, **kwargs):
-        return Response({'info': 'Пожалуйста, отправьте POST запрос с полями username и password'})
+        return Response()
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
