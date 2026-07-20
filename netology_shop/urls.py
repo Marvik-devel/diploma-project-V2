@@ -19,10 +19,12 @@ from django.urls import path
 from backend.views import RegisterView
 from backend.views import LoginView
 from backend.views import ProductInfoView
+from backend.views import BasketView
 
 urlpatterns = [
     path('admin/', admin.site.core_admin_site if hasattr(admin.site, 'core_admin_site') else admin.site.urls),
     path('api/v1/user/register/', RegisterView.as_view(), name='user-register'),
     path('api/v1/user/login/', LoginView.as_view(), name='user-login'),
     path('api/v1/products/', ProductInfoView.as_view(), name='product-list'),
+    path('api/v1/basket/', BasketView.as_view(), name='basket'),
 ]
