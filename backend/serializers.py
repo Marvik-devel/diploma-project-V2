@@ -24,15 +24,23 @@ class ProductInfoSerializer(serializers.ModelSerializer):
         model = ProductInfo
         fields = ('id', 'model', 'external_id', 'shop', 'product', 'price', 'price_rrt', 'quantity')
 
+
 class OrderItemSerializer(serializers.ModelSerializer):
     product_info = ProductInfoSerializer(read_only=True)
-    product_info_id = serializers.IntegerField(write_only=True)
+
+    # Заменяем IntegerField на PrimaryKeyRelatedField!
+    # Теперь DRF сам проверит наличие товара в базе
+    product_info_id = serializers.PrimaryKeyRelatedField(
+        queryset=ProductInfo.objects.all(),
+        source='product_info',
+        write_only=True
+    )
 
     class Meta:
         model = OrderItem
         fields = ('id', 'product_info', 'product_info_id', 'quantity', 'order')
         extra_kwargs = {
-            'order': {'write_only': True}
+            'order': {'read_only': True}
         }
 
     def validate_quantity(self, value):
