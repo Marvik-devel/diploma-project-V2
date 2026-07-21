@@ -1,14 +1,24 @@
 from django.contrib import admin
-from django.contrib import admin
-from backend.models import User, Shop, Category, Product, ProductInfo, Parameter, ProductParameter, Order, OrderItem, Contact
+from backend.models import (
+    User, Shop, Category, Product, ProductInfo,
+    Parameter, ProductParameter, Order, OrderItem, Contact
+)
 
-@admin.register(ProductInfo)
-class ProductInfoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'model', 'product', 'shop', 'quantity', 'price', 'price_rrc')
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+@admin.register(Shop)
+class ShopAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'state')
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'category')
+
+@admin.register(ProductInfo)
+class ProductInfoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product', 'shop', 'quantity', 'price', 'price_rrc')
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
