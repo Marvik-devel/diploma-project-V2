@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from backend.models import User, ProductInfo
-from backend.models import OrderItem
+from backend.models import OrderItem, Order
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -47,3 +47,17 @@ class OrderItemSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Количество товара должно быть больше 0.")
         return value
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'product_info', 'quantity')
+
+
+# 2. Сериализатор для самой корзины/заказа (включая вложенные товары)
+class OrderSerializer(serializers.ModelSerializer):
+    ordered_items = OrderItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ('id', 'user', 'state', 'dt', 'ordered_items')
