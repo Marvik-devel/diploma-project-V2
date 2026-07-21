@@ -28,8 +28,6 @@ class ProductInfoSerializer(serializers.ModelSerializer):
 class OrderItemSerializer(serializers.ModelSerializer):
     product_info = ProductInfoSerializer(read_only=True)
 
-    # Заменяем IntegerField на PrimaryKeyRelatedField!
-    # Теперь DRF сам проверит наличие товара в базе
     product_info_id = serializers.PrimaryKeyRelatedField(
         queryset=ProductInfo.objects.all(),
         source='product_info',
@@ -48,16 +46,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Количество товара должно быть больше 0.")
         return value
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        fields = ('id', 'product_info', 'quantity')
 
-
-# 2. Сериализатор для самой корзины/заказа (включая вложенные товары)
+# Сериализатор для самой корзины/заказа (включая вложенные товары)
 class OrderSerializer(serializers.ModelSerializer):
-    ordered_items = OrderItemSerializer(many=True, read_only=True)
+    order_items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = ('id', 'user', 'state', 'dt', 'ordered_items')
+        fields = ('id', 'user', 'state', 'dt', 'order_items')

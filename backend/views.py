@@ -19,7 +19,6 @@ from django.http import JsonResponse
 class RegisterView(APIView):
     def post(self, request):
 
-            # 1. Передай входящие данные (они лежат в request.data) в наш сериализатор:
             serializer = UserRegisterSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
