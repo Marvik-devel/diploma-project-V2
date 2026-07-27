@@ -5,6 +5,9 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from backend.models import Category, Shop, Product, ProductInfo, Order, OrderItem
+from rest_framework.throttling import UserRateThrottle
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 User = get_user_model()
 
@@ -13,9 +16,9 @@ class BasketAPITestCase(APITestCase):
     def setUp(self):
         # 1. Создаем тестового пользователя
         self.user = User.objects.create_user(
-            username='testuser',
-            email='testuser@example.com',
-            password='testpassword123'
+            username='throttle_user',
+            email='throttle@example.com',
+            password='password123'
         )
         self.client.force_authenticate(user=self.user)
 
@@ -80,3 +83,39 @@ class BasketAPITestCase(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(OrderItem.objects.count(), 0)
+
+class TestingThrottle(UserRateThrottle):
+    # Лимит 3 запроса в минуту для теста
+    rate = '3/minute'
+
+
+class ThrottleTestView(APIView):
+    throttle_classes = [TestingThrottle]
+
+    def get(self, request):
+        return Response({'status': 'ok'})
+
+
+class ThrottlingTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='throttle_user',
+            email='throttle@example.com',
+            password='password123'
+        )
+        self.client.force_authenticate(user=self.user)
+
+    def test_throttling_limit(self):
+        """Тест проверяет, возвращается ли 429 status code"""
+        view = ThrottleTestView.as_view()
+
+        for _ in range(3):
+            request = self.client.get('/fake-url/').wsgi_request
+            response = view(request)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # 4-й запрос должен заблокироваться
+        request = self.client.get('/fake-url/').wsgi_request
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
