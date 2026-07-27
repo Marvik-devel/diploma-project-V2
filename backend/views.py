@@ -15,16 +15,24 @@ from backend.models import Order, OrderItem
 from backend.serializers import OrderSerializer, OrderItemSerializer
 from django.http import JsonResponse
 from rest_framework.authentication import TokenAuthentication
+from backend.tasks import send_email_task
 
 
 class RegisterView(APIView):
     def post(self, request):
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()  # Сохраняем пользователя в переменную
 
-            serializer = UserRegisterSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Отправляем письмо через Celery
+            send_email_task.delay(
+                subject='Успешная регистрация',
+                message=f'Здравствуйте, {user.username}! Вы успешно зарегистрировались на платформе.',
+                to_email=user.email
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(ObtainAuthToken):
