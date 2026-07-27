@@ -14,6 +14,7 @@ from backend.models import ProductInfo
 from backend.models import Order, OrderItem
 from backend.serializers import OrderSerializer, OrderItemSerializer
 from django.http import JsonResponse
+from rest_framework.authentication import TokenAuthentication
 
 
 class RegisterView(APIView):
@@ -49,6 +50,8 @@ class ProductInfoView(APIView):
 
 
 class BasketView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     # 1. Получить товары из корзины
     def get(self, request, *args, **kwargs):
         basket = Order.objects.filter(user=request.user, state='basket').first()
