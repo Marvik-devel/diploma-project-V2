@@ -52,6 +52,7 @@ class BasketAPITestCase(APITestCase):
         # Сначала создаем корзину с товаром
         basket = Order.objects.create(user=self.user, state='basket')
         OrderItem.objects.create(order=basket, product_info=self.product_info, quantity=3)
+        self.client.force_authenticate(user=self.user)
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
