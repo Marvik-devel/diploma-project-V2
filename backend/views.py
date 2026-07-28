@@ -62,7 +62,11 @@ class BasketView(APIView):
     permission_classes = [IsAuthenticated]
     # 1. Получить товары из корзины
     def get(self, request, *args, **kwargs):
-        basket = Order.objects.filter(user=request.user, state='basket').first()
+        basket = Order.objects.filter(user=request.user, state='basket').prefetch_related(
+            'order_items__product_info__product',
+            'order_items__product_info__shop',
+        ).first()
+
         if not basket:
             return JsonResponse({'Status': False, 'Error': 'Корзина пуста'}, status=404)
 

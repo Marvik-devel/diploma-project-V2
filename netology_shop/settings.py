@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'backend',
+    'silk',
 ]
 
 MIDDLEWARE = [
+    'silk.middleware.SilkyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
