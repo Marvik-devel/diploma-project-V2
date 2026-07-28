@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import sentry_sdk
+import os
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -156,3 +160,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'backend.User'
 
 CELERY_TASK_ALWAYS_EAGER = True
+
+SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://public@sentry.example.com/1')
+
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[
+        DjangoIntegration(),
+        CeleryIntegration(),
+    ],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)
