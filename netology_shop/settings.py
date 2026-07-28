@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'baton',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'backend',
     'silk',
+    'baton.autodiscover',
+
 ]
 
 MIDDLEWARE = [
@@ -130,6 +133,16 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'REST API сервиса заказа товаров для розничных сетей',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+BATON = {
+    'SITE_HEADER': 'Netology Shop Admin',
+    'SITE_TITLE': 'Netology Shop',
+    'INDEX_TITLE': 'Управление магазином',
+    'SUPPORT_HREF': 'https://github.com/',
+    'COPYRIGHT': 'Copyright © 2026 Netology Shop',
+    'POWERED_BY': '<a href="https://github.com/otto-torino/django-baton">Django Baton</a>',
+    'MENU_ALWAYS_COLLAPSED': False,
 }
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
