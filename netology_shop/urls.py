@@ -20,12 +20,14 @@ from backend.views import RegisterView
 from backend.views import LoginView
 from backend.views import ProductInfoView
 from backend.views import BasketView
+from django.views.generic import TemplateView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
 
 urlpatterns = [
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
     path('admin/', admin.site.core_admin_site if hasattr(admin.site, 'core_admin_site') else admin.site.urls),
     path('api/v1/user/register/', RegisterView.as_view(), name='user-register'),
     path('api/v1/user/login/', LoginView.as_view(), name='user-login'),
@@ -35,4 +37,5 @@ urlpatterns = [
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('silk/', include('silk.urls', namespace='silk')),
     path('baton/', include('baton.urls')),
+    path('social-auth/', include('social_django.urls', namespace='social')),
 ]
