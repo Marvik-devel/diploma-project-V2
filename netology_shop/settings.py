@@ -183,6 +183,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_ALWAYS_EAGER = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -207,8 +208,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'backend.User'
-
-CELERY_TASK_ALWAYS_EAGER = True
 
 SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://public@sentry.example.com/1')
 
