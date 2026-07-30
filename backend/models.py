@@ -32,7 +32,7 @@ class User(AbstractUser):
                             choices = USER_TYPE_CHOICES,
                             default='customer'
     )
-
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     # Переключаем авторизацию на email вместо логина
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

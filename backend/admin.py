@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from backend.models import (
     User, Shop, Category, Product, ProductInfo,
     Parameter, ProductParameter, Order, OrderItem, Contact
 )
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -28,3 +30,8 @@ class OrderAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'order', 'product_info', 'quantity')
 
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + (
+        ('Дополнительная информация', {'fields': ('avatar',)}),
+    )

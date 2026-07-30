@@ -8,18 +8,13 @@
     <h1>Добро пожаловать в API Netology Shop</h1>
 
     {% if user.is_authenticated %}
-        <!-- ЭТО УВИДИТ АВТОРИЗОВАННЫЙ ПОЛЬЗОВАТЕЛЬ -->
         <h2 style="color: green;"> Вы успешно вошли!</h2>
 
-        <!-- Кнопка выхода (если есть URL для logout) -->
-        <!-- <a href="/logout/">Выйти</a> -->
-
     {% else %}
-        <!-- ЭТО УВИДИТ ГОСТЬ -->
         <p>Для авторизации нажмите кнопку ниже:</p>
 
         <form action="/social-auth/login/github/" method="post">
-            {% csrf_token %}  <!-- ДИНАМИЧЕСКИЙ ТОКЕН DJANGO -->
+            {% csrf_token %}
             <button type="submit" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
                 Войти через GitHub
             </button>
